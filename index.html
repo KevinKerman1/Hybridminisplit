@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>EG4 12K BTU Hybrid Solar Mini-Split</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* STICKY HEADER */
+    .sticky-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: transparent;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    .sticky-header.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .sticky-header.scrolled {
+      background: rgba(0,0,0,0.95);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    }
+    .sticky-header__logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+    }
+    .sticky-header__logo span {
+      color: #e94560;
+    }
+    .sticky-header__right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .sticky-header__phone {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .sticky-header__phone:hover { color: #fff; }
+    .sticky-header__phone-text {
+      display: none;
+    }
+    @media (min-width: 600px) {
+      .sticky-header__phone-text { display: inline; }
+    }
+    .sticky-header__cta {
+      background: #e94560;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+    .sticky-header__cta:hover { background: #d63d56; }
+
+    /* LOADER */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loader__text {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .loader__bar {
+      width: 200px;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .loader__progress {
+      height: 100%;
+      background: #e94560;
+      width: 0%;
+      transition: width 0.1s ease;
+    }
+
+    /* SCROLL HERO */
+    .scroll-hero {
+      height: 300vh;
+      position: relative;
+    }
+    .scroll-hero__sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .scroll-hero__canvas {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .scroll-hero__overlay-top {
+      position: absolute;
+      top: 3vh;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      pointer-events: none;
+      z-index: 10;
+      width: 90%;
+    }
+    .scroll-hero__badge {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      background: rgba(233,69,96,0.15);
+      border: 1px solid rgba(233,69,96,0.3);
+      border-radius: 100px;
+      margin-bottom: 0.75rem;
+      font-size: 0.6rem;
+      color: #e94560;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .scroll-hero__title {
+      font-size: clamp(1.5rem, 5vw, 4rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-shadow: 0 2px 40px rgba(0,0,0,0.8);
+    }
+    .scroll-hero__title-gradient {
+      background: linear-gradient(135deg, #e94560, #00d9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .scroll-hero__subtitle {
+      font-size: clamp(0.9rem, 2vw, 1.25rem);
+      color: rgba(255,255,255,0.8);
+      margin-top: 0.75rem;
+      font-weight: 500;
+    }
+    .scroll-hero__cta {
+      display: inline-block;
+      margin-top: 1.25rem;
+      padding: 0.9rem 1.75rem;
+      background: linear-gradient(135deg, #e94560, #d63d56);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      pointer-events: auto;
+      box-shadow: 0 8px 30px rgba(233,69,96,0.4);
+      transition: transform 0.2s ease;
+    }
+    .scroll-hero__cta:hover { transform: translateY(-2px); }
+    .scroll-hero__trust {
+      margin-top: 1rem;
+      font-size: 0.7rem;
+      color: #000;
+      letter-spacing: 0.02em;
+      text-shadow: none;
+    }
+    .scroll-hero__scroll-indicator {
+      position: absolute;
+      bottom: 3vh;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .scroll-hero__scroll-text {
+      font-size: 0.55rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .scroll-hero__scroll-line {
+      width: 1px;
+      height: 30px;
+      background: linear-gradient(180deg, #e94560, transparent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* STATS */
+    .stats {
+      padding: 4rem 1.5rem;
+      background: #000;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .stats__grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      text-align: center;
+    }
+    @media (min-width: 600px) {
+      .stats__grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .stats__number {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+    .stats__label {
+      font-size: 0.9rem;
+      color: #e94560;
+      margin-top: 0.4rem;
+      font-weight: 600;
+    }
+    .stats__sub {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.4);
+      margin-top: 0.2rem;
+    }
+
+    /* PROBLEM/SOLUTION */
+    .problem-solution {
+      padding: 4rem 1.5rem;
+      background: #000;
+    }
+    .problem-solution__container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 700px) {
+      .problem-solution__container {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+      }
+    }
+    .problem-solution__col {
+      padding: 1.5rem;
+      border-radius: 16px;
+    }
+    .problem-solution__col--problem {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .problem-solution__col--solution {
+      background: rgba(233,69,96,0.05);
+      border: 1px solid rgba(233,69,96,0.15);
+    }
+    .problem-solution__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    .problem-solution__col--problem .problem-solution__title {
+      color: rgba(255,255,255,0.7);
+    }
+    .problem-solution__col--solution .problem-solution__title {
+      color: #e94560;
+    }
+    .problem-solution__list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .problem-solution__item {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.7);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    .problem-solution__icon {
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+    .problem-solution__col--problem .problem-solution__icon { color: #ff6b6b; }
+    .problem-solution__col--solution .problem-solution__icon { color: #00d9ff; }
+
+    /* FEATURES */
+    .features {
+      padding: 4rem 1.5rem;
+      background: linear-gradient(180deg, #000 0%, #0a0a0f 100%);
+    }
+    .features__container { max-width: 1000px; margin: 0 auto; }
+    .features__header { text-align: center; margin-bottom: 3rem; }
+    .features__eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: #e94560;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .features__title {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: #fff;
+    }
+    .features__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 600px) {
+      .features__grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .features__grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .features__card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .features__icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .features__card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+    .features__card-text {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+
+    /* HOW IT WORKS */
+    .how-it-works {
+      padding: 4rem 1.5rem;
+      background: #0a0a0f;
+    }
+    .how-it-works__container { max-width: 900px; margin: 0 auto; }
+    .how-it-works__header { text-align: center; margin-bottom: 3rem; }
+    .how-it-works__eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: #e94560;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .how-it-works__title {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: #fff;
+    }
+    .how-it-works__steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 700px) {
+      .how-it-works__steps { grid-template-columns: repeat(3, 1fr); }
+    }
+    .how-it-works__step {
+      text-align: center;
+      padding: 1.5rem;
+    }
+    .how-it-works__number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      background: rgba(233,69,96,0.15);
+      border: 1px solid rgba(233,69,96,0.3);
+      border-radius: 50%;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e94560;
+      margin-bottom: 1rem;
+    }
+    .how-it-works__icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .how-it-works__step-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .how-it-works__step-text {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+
+    /* TRUST HEADER */
+    .trust-header {
+      padding: 2rem 1.5rem;
+      background: #0a0a0f;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .trust-header__text {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 0.5rem;
+    }
+    .trust-header__stars {
+      color: #fbbf24;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+    }
+    .trust-header__rating {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.85rem;
+      margin-left: 0.5rem;
+    }
+
+    /* TESTIMONIALS */
+    .testimonials {
+      padding: 2rem 0;
+      background: #0a0a0f;
+      overflow: hidden;
+    }
+    .testimonials__track {
+      display: flex;
+      gap: 1rem;
+      animation: marquee 30s linear infinite;
+    }
+    .testimonials__card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 1.25rem;
+      min-width: 260px;
+      flex-shrink: 0;
+    }
+    .testimonials__text {
+      color: #fff;
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+    .testimonials__author {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .testimonials__author span { color: #e94560; }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* TRUST BADGES */
+    .trust-badges {
+      padding: 2rem 1.5rem;
+      background: #0a0a0f;
+    }
+    .trust-badges__container {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .trust-badges__badge {
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      white-space: nowrap;
+    }
+
+    /* QUOTE FORM SECTION */
+    .quote-section {
+      padding: 4rem 1.5rem;
+      background: linear-gradient(180deg, #0a0a0f 0%, #000 100%);
+      position: relative;
+    }
+    .quote-section__glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 300px;
+      background: radial-gradient(ellipse, rgba(233,69,96,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .quote-section__container {
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .quote-section__header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .quote-section__eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: #e94560;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .quote-section__title {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .quote-section__subtitle {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* LEAD FORM */
+    .lead-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+    }
+    .lead-form__row {
+      display: flex;
+      gap: 0.875rem;
+    }
+    .lead-form__row .lead-form__field {
+      flex: 1;
+    }
+    .lead-form__field {
+      position: relative;
+    }
+    .lead-form__input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      padding-right: 2.5rem;
+      font-size: 0.95rem;
+      color: #fff;
+      font-family: inherit;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .lead-form__input::placeholder {
+      color: rgba(255,255,255,0.4);
+    }
+    .lead-form__input:focus {
+      outline: none;
+      border-color: #e94560;
+      background: rgba(255,255,255,0.08);
+    }
+    .lead-form__input.valid {
+      border-color: #00d9ff;
+    }
+    .lead-form__input.invalid {
+      border-color: #e94560;
+    }
+    .lead-form__input option {
+      background: #1a1a1a;
+      color: #fff;
+    }
+    .lead-form__icon {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .lead-form__icon.show { opacity: 1; }
+    .lead-form__error {
+      font-size: 0.75rem;
+      color: #e94560;
+      margin-top: 0.25rem;
+      display: none;
+    }
+    .lead-form__error.show { display: block; }
+    .lead-form__submit {
+      background: linear-gradient(135deg, #e94560, #d63d56);
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 10px 40px rgba(233,69,96,0.4);
+      width: 100%;
+      margin-top: 0.5rem;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .lead-form__submit:hover { transform: translateY(-2px); }
+    .lead-form__submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .lead-form__footer {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .lead-form__secure {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 0.5rem;
+    }
+    .lead-form__phone-alt {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .lead-form__phone-alt a {
+      color: #e94560;
+      text-decoration: none;
+    }
+
+    /* THANK YOU STATE */
+    .thank-you {
+      text-align: center;
+      padding: 2rem 0;
+      display: none;
+    }
+    .thank-you.show { display: block; }
+    .thank-you__icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .thank-you__title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #00d9ff;
+      margin-bottom: 1rem;
+    }
+    .thank-you__text {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .thank-you__reset {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 0.75rem 1.5rem;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .thank-you__reset:hover {
+      border-color: rgba(255,255,255,0.4);
+      color: #fff;
+    }
+
+    /* FAQ */
+    .faq {
+      padding: 4rem 1.5rem;
+      background: #000;
+    }
+    .faq__container { max-width: 700px; margin: 0 auto; }
+    .faq__header { text-align: center; margin-bottom: 2.5rem; }
+    .faq__eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: #e94560;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .faq__title {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      color: #fff;
+    }
+    .faq__list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .faq__item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .faq__question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1.25rem;
+      text-align: left;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-family: inherit;
+    }
+    .faq__question:hover { background: rgba(255,255,255,0.02); }
+    .faq__arrow {
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+      color: rgba(255,255,255,0.5);
+    }
+    .faq__item.open .faq__arrow { transform: rotate(180deg); }
+    .faq__answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq__item.open .faq__answer {
+      max-height: 200px;
+    }
+    .faq__answer-inner {
+      padding: 0 1.25rem 1.25rem;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+    }
+
+    /* FINAL CTA */
+    .final-cta {
+      padding: 4rem 1.5rem;
+      background: linear-gradient(180deg, #000 0%, #0a0a0f 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta__glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 300px;
+      background: radial-gradient(ellipse, rgba(233,69,96,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .final-cta__container {
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .final-cta__badge {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      background: rgba(233,69,96,0.2);
+      border: 1px solid rgba(233,69,96,0.4);
+      border-radius: 100px;
+      font-size: 0.65rem;
+      color: #e94560;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .final-cta__title {
+      font-size: clamp(1.75rem, 5vw, 2.5rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .final-cta__subtitle {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1.5rem;
+    }
+    .final-cta__button {
+      display: inline-block;
+      background: linear-gradient(135deg, #e94560, #d63d56);
+      color: #fff;
+      padding: 1rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 10px 40px rgba(233,69,96,0.4);
+      transition: transform 0.2s ease;
+    }
+    .final-cta__button:hover { transform: translateY(-2px); }
+    .final-cta__expires {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .final-cta__note {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.35);
+      font-style: italic;
+    }
+
+    /* FOOTER */
+    .footer {
+      padding: 3rem 1.5rem 1.5rem;
+      background: #000;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .footer__container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 600px) {
+      .footer__grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .footer__col-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .footer__link {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s ease;
+    }
+    .footer__link:hover { color: rgba(255,255,255,0.7); }
+    .footer__contact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .footer__contact a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+    }
+    .footer__contact a:hover { color: #e94560; }
+    .footer__bottom {
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-align: center;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+    }
+    .footer__legal {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    .footer__legal a {
+      color: rgba(255,255,255,0.3);
+      text-decoration: none;
+    }
+    .footer__legal a:hover { color: rgba(255,255,255,0.5); }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY HEADER -->
+  <header class="sticky-header" id="stickyHeader">
+    <a href="#" class="sticky-header__logo">EG<span>4</span></a>
+    <div class="sticky-header__right">
+      <a href="tel:+14805550123" class="sticky-header__phone">
+        <span>📞</span>
+        <span class="sticky-header__phone-text">(480) 555-0123</span>
+      </a>
+      <a href="#quote" class="sticky-header__cta">Get Quote</a>
+    </div>
+  </header>
+
+  <!-- LOADER -->
+  <div class="loader" id="loader">
+    <div class="loader__text">Loading experience...</div>
+    <div class="loader__bar">
+      <div class="loader__progress" id="loaderProgress"></div>
+    </div>
+  </div>
+
+  <!-- SCROLL HERO -->
+  <section class="scroll-hero" id="scrollHero">
+    <div class="scroll-hero__sticky">
+      <canvas id="canvas" class="scroll-hero__canvas"></canvas>
+
+      <div class="scroll-hero__overlay-top">
+        <div class="scroll-hero__badge">⚡ Solar-Powered Cooling</div>
+        <h1 class="scroll-hero__title">
+          12K BTU Hybrid<br>
+          <span class="scroll-hero__title-gradient">Solar Mini-Split</span>
+        </h1>
+        <p class="scroll-hero__subtitle">Cut cooling costs 80%. No inverter required.</p>
+        <a href="#quote" class="scroll-hero__cta">Get Free Quote →</a>
+        <p class="scroll-hero__trust">✓ 10-Year Warranty &nbsp;•&nbsp; ✓ ENERGY STAR® &nbsp;•&nbsp; ✓ Free Shipping</p>
+      </div>
+
+      <div class="scroll-hero__scroll-indicator">
+        <span class="scroll-hero__scroll-text">Scroll to explore</span>
+        <div class="scroll-hero__scroll-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="stats__grid">
+      <div>
+        <div class="stats__number" data-target="12000">0</div>
+        <div class="stats__label">BTU</div>
+        <div class="stats__sub">Cooling Power</div>
+      </div>
+      <div>
+        <div class="stats__number" data-target="22">0</div>
+        <div class="stats__label">SEER</div>
+        <div class="stats__sub">Efficiency Rating</div>
+      </div>
+      <div>
+        <div class="stats__number" data-target="48" data-suffix="V">0</div>
+        <div class="stats__label">DC</div>
+        <div class="stats__sub">Solar Direct Input</div>
+      </div>
+      <div>
+        <div class="stats__number" data-target="80" data-suffix="%">0</div>
+        <div class="stats__label">Savings</div>
+        <div class="stats__sub">vs Traditional AC</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM / SOLUTION -->
+  <section class="problem-solution">
+    <div class="problem-solution__container">
+      <div class="problem-solution__col problem-solution__col--problem">
+        <h3 class="problem-solution__title">The Problem</h3>
+        <ul class="problem-solution__list">
+          <li class="problem-solution__item">
+            <span class="problem-solution__icon">❌</span>
+            <span>Traditional AC drains your wallet</span>
+          </li>
+          <li class="problem-solution__item">
+            <span class="problem-solution__icon">❌</span>
+            <span>Inverter losses waste 15-20% of solar</span>
+          </li>
+          <li class="problem-solution__item">
+            <span class="problem-solution__icon">❌</span>
+            <span>Grid dependency leaves you vulnerable</span>
+          </li>
+          <li class="problem-solution__item">
+            <span class="problem-solution__icon">❌</span>
+            <span>Complex installations cost thousands</span>
+          </li>
+        </ul>
+      </div>
+      <div class="problem-solution__col problem-solution__col--solution">
+        <h3 class="problem-solution__title">The EG4 Solution</h3>
+        <ul class="problem-solution__list">
+          <li class="problem-solution__item">
+            <span class="problem-solution__icon">✓</span>
+            <span>Direct 48V DC = zero conversion loss</span>
+          </li>
+          <li class="problem-solution__item">
+            <span class="problem-solution__icon">✓</span>
+            <span>Runs on solar alone during peak hours</span>
+          </li>
+          <li class="problem-solution__item">
+            <span class="problem-solution__icon">✓</span>
+            <span>Seamless grid backup when needed</span>
+          </li>
+          <li class="problem-solution__item">
+            <span class="problem-solution__icon">✓</span>
+            <span>DIY-friendly installation</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="features__container">
+      <div class="features__header">
+        <div class="features__eyebrow">Why EG4</div>
+        <h2 class="features__title">Built for Off-Grid Excellence</h2>
+      </div>
+      <div class="features__grid">
+        <div class="features__card">
+          <div class="features__icon">☀️</div>
+          <h3 class="features__card-title">Direct DC Solar</h3>
+          <p class="features__card-text">Connect panels directly. No inverter required.</p>
+        </div>
+        <div class="features__card">
+          <div class="features__icon">⚡</div>
+          <h3 class="features__card-title">Hybrid AC/DC</h3>
+          <p class="features__card-text">Seamlessly switches between solar and grid.</p>
+        </div>
+        <div class="features__card">
+          <div class="features__icon">🧠</div>
+          <h3 class="features__card-title">Smart MPPT</h3>
+          <p class="features__card-text">Built-in power point tracking optimizes harvest.</p>
+        </div>
+        <div class="features__card">
+          <div class="features__icon">📱</div>
+          <h3 class="features__card-title">Wi-Fi Control</h3>
+          <p class="features__card-text">Monitor and control from anywhere via app.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works">
+    <div class="how-it-works__container">
+      <div class="how-it-works__header">
+        <div class="how-it-works__eyebrow">Simple Process</div>
+        <h2 class="how-it-works__title">How It Works</h2>
+      </div>
+      <div class="how-it-works__steps">
+        <div class="how-it-works__step">
+          <div class="how-it-works__number">1</div>
+          <div class="how-it-works__icon">📋</div>
+          <h3 class="how-it-works__step-title">Request Quote</h3>
+          <p class="how-it-works__step-text">Fill out the form below - takes just 30 seconds</p>
+        </div>
+        <div class="how-it-works__step">
+          <div class="how-it-works__number">2</div>
+          <div class="how-it-works__icon">📞</div>
+          <h3 class="how-it-works__step-title">We Call You</h3>
+          <p class="how-it-works__step-text">Solar specialist calls within 24 hours</p>
+        </div>
+        <div class="how-it-works__step">
+          <div class="how-it-works__number">3</div>
+          <div class="how-it-works__icon">✅</div>
+          <h3 class="how-it-works__step-title">Get Installed</h3>
+          <p class="how-it-works__step-text">Professional setup or DIY with support</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST HEADER -->
+  <div class="trust-header">
+    <p class="trust-header__text">Trusted by 2,500+ Homeowners</p>
+    <span class="trust-header__stars">★★★★★</span>
+    <span class="trust-header__rating">4.9/5 (127 reviews)</span>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="testimonials__track">
+      <div class="testimonials__card">
+        <p class="testimonials__text">"Cut my cooling bill by 75% in the first month."</p>
+        <div class="testimonials__author"><span>Mike R.</span> · Phoenix, AZ</div>
+      </div>
+      <div class="testimonials__card">
+        <p class="testimonials__text">"Runs all day on solar alone. Grid? What grid?"</p>
+        <div class="testimonials__author"><span>Sarah K.</span> · Austin, TX</div>
+      </div>
+      <div class="testimonials__card">
+        <p class="testimonials__text">"Best investment for my off-grid cabin."</p>
+        <div class="testimonials__author"><span>David L.</span> · Colorado</div>
+      </div>
+      <div class="testimonials__card">
+        <p class="testimonials__text">"Installation was straightforward."</p>
+        <div class="testimonials__author"><span>Jennifer M.</span> · Florida</div>
+      </div>
+      <div class="testimonials__card">
+        <p class="testimonials__text">"Finally, a mini-split that understands solar."</p>
+        <div class="testimonials__author"><span>Tom H.</span> · California</div>
+      </div>
+      <div class="testimonials__card">
+        <p class="testimonials__text">"Cut my cooling bill by 75% in the first month."</p>
+        <div class="testimonials__author"><span>Mike R.</span> · Phoenix, AZ</div>
+      </div>
+      <div class="testimonials__card">
+        <p class="testimonials__text">"Runs all day on solar alone. Grid? What grid?"</p>
+        <div class="testimonials__author"><span>Sarah K.</span> · Austin, TX</div>
+      </div>
+      <div class="testimonials__card">
+        <p class="testimonials__text">"Best investment for my off-grid cabin."</p>
+        <div class="testimonials__author"><span>David L.</span> · Colorado</div>
+      </div>
+      <div class="testimonials__card">
+        <p class="testimonials__text">"Installation was straightforward."</p>
+        <div class="testimonials__author"><span>Jennifer M.</span> · Florida</div>
+      </div>
+      <div class="testimonials__card">
+        <p class="testimonials__text">"Finally, a mini-split that understands solar."</p>
+        <div class="testimonials__author"><span>Tom H.</span> · California</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BADGES -->
+  <div class="trust-badges">
+    <div class="trust-badges__container">
+      <span class="trust-badges__badge">ENERGY STAR®</span>
+      <span class="trust-badges__badge">10-Year Warranty</span>
+      <span class="trust-badges__badge">Made in USA</span>
+      <span class="trust-badges__badge">BBB A+</span>
+    </div>
+  </div>
+
+  <!-- QUOTE FORM SECTION -->
+  <section class="quote-section" id="quote">
+    <div class="quote-section__glow"></div>
+    <div class="quote-section__container">
+      <div class="quote-section__header">
+        <div class="quote-section__eyebrow">Free Estimate</div>
+        <h2 class="quote-section__title">Get Your Custom Solar Cooling Quote</h2>
+        <p class="quote-section__subtitle">Join 2,500+ homeowners saving with EG4</p>
+      </div>
+
+      <!-- Lead Form -->
+      <form id="leadForm" class="lead-form">
+        <div class="lead-form__row">
+          <div class="lead-form__field">
+            <input type="text" name="firstName" placeholder="First Name *" class="lead-form__input" required>
+            <span class="lead-form__icon" id="firstNameIcon"></span>
+            <div class="lead-form__error" id="firstNameError">Please enter your first name</div>
+          </div>
+          <div class="lead-form__field">
+            <input type="text" name="lastName" placeholder="Last Name *" class="lead-form__input" required>
+            <span class="lead-form__icon" id="lastNameIcon"></span>
+            <div class="lead-form__error" id="lastNameError">Please enter your last name</div>
+          </div>
+        </div>
+        <div class="lead-form__field">
+          <input type="email" name="email" placeholder="Email Address *" class="lead-form__input" required>
+          <span class="lead-form__icon" id="emailIcon"></span>
+          <div class="lead-form__error" id="emailError">Please enter a valid email address</div>
+        </div>
+        <div class="lead-form__field">
+          <input type="tel" name="phone" placeholder="Phone Number *" class="lead-form__input" required>
+          <span class="lead-form__icon" id="phoneIcon"></span>
+          <div class="lead-form__error" id="phoneError">Please enter a 10-digit phone number</div>
+        </div>
+        <div class="lead-form__field">
+          <input type="text" name="zipCode" placeholder="ZIP Code *" class="lead-form__input" maxlength="5" required>
+          <span class="lead-form__icon" id="zipCodeIcon"></span>
+          <div class="lead-form__error" id="zipCodeError">Please enter a 5-digit ZIP code</div>
+        </div>
+        <div class="lead-form__field">
+          <select name="projectType" class="lead-form__input" required>
+            <option value="">What describes your project? *</option>
+            <option value="new-install">New Installation</option>
+            <option value="replacement">Replacing Existing AC</option>
+            <option value="off-grid">Off-Grid / Solar Setup</option>
+            <option value="commercial">Commercial Project</option>
+            <option value="not-sure">Not Sure Yet</option>
+          </select>
+          <div class="lead-form__error" id="projectTypeError">Please select a project type</div>
+        </div>
+        <button type="submit" class="lead-form__submit" id="submitBtn">
+          Get My Free Quote →
+        </button>
+      </form>
+
+      <!-- Thank You State -->
+      <div class="thank-you" id="thankYou">
+        <div class="thank-you__icon">✓</div>
+        <h3 class="thank-you__title">Quote Request Received!</h3>
+        <p class="thank-you__text" id="thankYouText">
+          Thanks! A solar cooling specialist will call you within 24 hours.
+          <br><br>
+          Check your email for confirmation.
+        </p>
+        <button class="thank-you__reset" id="resetForm">Request Another Quote</button>
+      </div>
+
+      <div class="lead-form__footer" id="formFooter">
+        <p class="lead-form__secure">🔒 Your information is secure and never shared</p>
+        <p class="lead-form__phone-alt">📞 Prefer to talk? Call <a href="tel:+14805550123">(480) 555-0123</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="faq__container">
+      <div class="faq__header">
+        <div class="faq__eyebrow">Questions</div>
+        <h2 class="faq__title">Frequently Asked Questions</h2>
+      </div>
+      <div class="faq__list">
+        <div class="faq__item">
+          <button class="faq__question">
+            How much can I really save on cooling costs?
+            <span class="faq__arrow">▼</span>
+          </button>
+          <div class="faq__answer">
+            <div class="faq__answer-inner">
+              Most customers see 60-80% reduction in cooling costs. Direct DC eliminates inverter losses, and running during peak sun means minimal grid usage. Your exact savings depend on your solar setup and usage patterns.
+            </div>
+          </div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__question">
+            Does it work when there's no sun?
+            <span class="faq__arrow">▼</span>
+          </button>
+          <div class="faq__answer">
+            <div class="faq__answer-inner">
+              Yes! The hybrid system automatically switches to grid power when solar is insufficient. You're never without cooling - the transition is seamless and instant.
+            </div>
+          </div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__question">
+            How hard is installation?
+            <span class="faq__arrow">▼</span>
+          </button>
+          <div class="faq__answer">
+            <div class="faq__answer-inner">
+              Many customers self-install with our comprehensive video guides and support. Professional installation is also available if you prefer. Either way, our team supports you every step.
+            </div>
+          </div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__question">
+            What's included in the warranty?
+            <span class="faq__arrow">▼</span>
+          </button>
+          <div class="faq__answer">
+            <div class="faq__answer-inner">
+              Our 10-year comprehensive warranty covers the compressor, all parts, and labor. We stand behind our products because we know they're built to last.
+            </div>
+          </div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__question">
+            What solar panels do I need?
+            <span class="faq__arrow">▼</span>
+          </button>
+          <div class="faq__answer">
+            <div class="faq__answer-inner">
+              The EG4 Mini-Split works with any 48V DC array. During your consultation, our team will recommend the right panel setup based on your specific needs and existing equipment.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="final-cta__glow"></div>
+    <div class="final-cta__container">
+      <div class="final-cta__badge">Limited Time Offer</div>
+      <h2 class="final-cta__title">$500 Off Professional Installation</h2>
+      <p class="final-cta__subtitle">When You Request a Quote This Month</p>
+      <a href="#quote" class="final-cta__button">Get My Free Quote →</a>
+      <p class="final-cta__expires">Offer expires <span id="offerExpiry"></span></p>
+      <p class="final-cta__note">*Or choose DIY and keep the savings</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__container">
+      <div class="footer__grid">
+        <div>
+          <h4 class="footer__col-title">Products</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Mini-Split</a></li>
+            <li><a href="#" class="footer__link">Batteries</a></li>
+            <li><a href="#" class="footer__link">Inverters</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">Support</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Installation</a></li>
+            <li><a href="#" class="footer__link">Warranty</a></li>
+            <li><a href="#" class="footer__link">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">Company</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">About</a></li>
+            <li><a href="#" class="footer__link">Contact</a></li>
+            <li><a href="#" class="footer__link">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__contact">
+        <span>📍 Phoenix, AZ</span>
+        <a href="tel:+14805550123">📞 (480) 555-0123</a>
+        <a href="mailto:sales@eg4electronics.com">✉️ sales@eg4electronics.com</a>
+      </div>
+      <div class="footer__bottom">
+        <p>© 2025 EG4 Electronics. All rights reserved.</p>
+        <div class="footer__legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================
+    // IMAGE SEQUENCE SCROLL ANIMATION
+    // Works on mobile + desktop
+    // =========================================
+
+    const FRAME_COUNT = 160;
+    const frames = [];
+    let loadedCount = 0;
+    let currentFrame = 0;
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const scrollHero = document.getElementById('scrollHero');
+    const loader = document.getElementById('loader');
+    const loaderProgress = document.getElementById('loaderProgress');
+
+    // Preload all frames
+    function preloadFrames() {
+      for (let i = 1; i <= FRAME_COUNT; i++) {
+        const img = new Image();
+        const num = String(i).padStart(3, '0');
+        img.src = `frames/f${num}.jpg`;
+
+        img.onload = () => {
+          loadedCount++;
+          loaderProgress.style.width = `${(loadedCount / FRAME_COUNT) * 100}%`;
+
+          // Draw first frame as soon as it loads
+          if (i === 1 && img.complete) {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            currentFrame = 0;
+          }
+
+          if (loadedCount === FRAME_COUNT) {
+            // All loaded - hide loader
+            loader.classList.add('hidden');
+          }
+        };
+
+        frames.push(img);
+      }
+    }
+
+    // Draw specific frame
+    function drawFrame(index) {
+      if (index === currentFrame) return;
+      currentFrame = index;
+
+      const img = frames[index];
+      if (img && img.complete) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+      }
+    }
+
+    // Calculate frame based on scroll
+    function updateFrame() {
+      const rect = scrollHero.getBoundingClientRect();
+      const scrollHeight = scrollHero.offsetHeight - window.innerHeight;
+      const scrolled = -rect.top;
+      const progress = Math.min(Math.max(scrolled / scrollHeight, 0), 1);
+
+      const frameIndex = Math.min(
+        Math.floor(progress * FRAME_COUNT),
+        FRAME_COUNT - 1
+      );
+
+      drawFrame(frameIndex);
+    }
+
+    // Scroll handler with RAF
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateFrame();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Touch support
+    window.addEventListener('touchmove', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateFrame();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Start loading
+    preloadFrames();
+
+    // =========================================
+    // STICKY HEADER
+    // =========================================
+    const stickyHeader = document.getElementById('stickyHeader');
+    let lastScrollY = 0;
+
+    function updateStickyHeader() {
+      const scrollY = window.scrollY;
+      const heroHeight = window.innerHeight;
+
+      if (scrollY > heroHeight * 0.5) {
+        stickyHeader.classList.add('visible', 'scrolled');
+      } else {
+        stickyHeader.classList.remove('visible', 'scrolled');
+      }
+
+      lastScrollY = scrollY;
+    }
+
+    window.addEventListener('scroll', updateStickyHeader, { passive: true });
+
+    // =========================================
+    // SMOOTH SCROLL FOR ANCHORS
+    // =========================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // =========================================
+    // NUMBER TICKER
+    // =========================================
+    const observerOptions = { threshold: 0.3 };
+    const numberObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          let current = 0;
+          const increment = target / 60;
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              el.textContent = target.toLocaleString() + suffix;
+              clearInterval(timer);
+            } else {
+              el.textContent = Math.floor(current).toLocaleString() + suffix;
+            }
+          }, 33);
+          numberObserver.unobserve(el);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.stats__number').forEach(el => {
+      numberObserver.observe(el);
+    });
+
+    // =========================================
+    // FAQ ACCORDION
+    // =========================================
+    document.querySelectorAll('.faq__question').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        const isOpen = item.classList.contains('open');
+
+        // Close all items
+        document.querySelectorAll('.faq__item').forEach(i => i.classList.remove('open'));
+
+        // Open clicked item if it wasn't open
+        if (!isOpen) {
+          item.classList.add('open');
+        }
+      });
+    });
+
+    // =========================================
+    // OFFER EXPIRY DATE
+    // =========================================
+    function getLastDayOfMonth() {
+      const now = new Date();
+      const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      const options = { month: 'long', day: 'numeric', year: 'numeric' };
+      return lastDay.toLocaleDateString('en-US', options);
+    }
+    document.getElementById('offerExpiry').textContent = getLastDayOfMonth();
+
+    // =========================================
+    // LEAD FORM - VALIDATION & SUBMISSION
+    // =========================================
+    const GHL_WEBHOOK = 'https://services.leadconnectorhq.com/hooks/8uDfZwEms36rykE5axKL/webhook-trigger/33001a8d-ed27-46ea-990c-5d26635640f8';
+
+    const leadForm = document.getElementById('leadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const thankYou = document.getElementById('thankYou');
+    const thankYouText = document.getElementById('thankYouText');
+    const formFooter = document.getElementById('formFooter');
+    const resetFormBtn = document.getElementById('resetForm');
+
+    // Validation patterns
+    const patterns = {
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      phone: /^\d{10}$/,
+      zipCode: /^\d{5}$/
+    };
+
+    // Field validators
+    function validateField(input) {
+      const name = input.name;
+      const value = input.value.trim();
+      const icon = document.getElementById(name + 'Icon');
+      const error = document.getElementById(name + 'Error');
+      let isValid = false;
+
+      if (name === 'firstName' || name === 'lastName') {
+        isValid = value.length > 0;
+      } else if (name === 'email') {
+        isValid = patterns.email.test(value);
+      } else if (name === 'phone') {
+        const digits = value.replace(/\D/g, '');
+        isValid = patterns.phone.test(digits);
+      } else if (name === 'zipCode') {
+        isValid = patterns.zipCode.test(value);
+      } else if (name === 'projectType') {
+        isValid = value !== '';
+      }
+
+      // Update UI
+      if (value.length > 0) {
+        input.classList.toggle('valid', isValid);
+        input.classList.toggle('invalid', !isValid);
+        if (icon) {
+          icon.textContent = isValid ? '✓' : '✗';
+          icon.classList.add('show');
+        }
+      } else {
+        input.classList.remove('valid', 'invalid');
+        if (icon) icon.classList.remove('show');
+      }
+
+      if (error) {
+        error.classList.toggle('show', !isValid && value.length > 0);
+      }
+
+      return isValid;
+    }
+
+    // Add blur validation to inputs
+    leadForm.querySelectorAll('.lead-form__input').forEach(input => {
+      input.addEventListener('blur', () => validateField(input));
+      input.addEventListener('input', () => {
+        if (input.classList.contains('invalid')) {
+          validateField(input);
+        }
+      });
+    });
+
+    // Format phone number as user types
+    const phoneInput = leadForm.querySelector('input[name="phone"]');
+    phoneInput.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 10) value = value.slice(0, 10);
+      e.target.value = value;
+    });
+
+    // Form submission
+    leadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Validate all fields
+      const inputs = leadForm.querySelectorAll('.lead-form__input');
+      let allValid = true;
+      inputs.forEach(input => {
+        if (!validateField(input)) {
+          allValid = false;
+        }
+      });
+
+      if (!allValid) return;
+
+      // Disable button
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      // Gather form data
+      const formData = new FormData(leadForm);
+      const firstName = formData.get('firstName');
+      const data = {
+        firstName: firstName,
+        lastName: formData.get('lastName'),
+        name: `${firstName} ${formData.get('lastName')}`,
+        email: formData.get('email'),
+        phone: '+1' + formData.get('phone').replace(/\D/g, ''),
+        zipCode: formData.get('zipCode'),
+        projectType: formData.get('projectType'),
+        source: 'EG4 Landing Page',
+        submittedAt: new Date().toISOString()
+      };
+
+      try {
+        const response = await fetch(GHL_WEBHOOK, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          // Show thank you
+          thankYouText.innerHTML = `Thanks <strong>${firstName}</strong>! A solar cooling specialist will call you within 24 hours.<br><br>Check your email for confirmation.`;
+          leadForm.style.display = 'none';
+          thankYou.classList.add('show');
+        } else {
+          throw new Error('Submission failed');
+        }
+      } catch (error) {
+        // Show error, re-enable form
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Get My Free Quote →';
+        alert('Something went wrong. Please try again or call us at (480) 555-0123.');
+      }
+    });
+
+    // Reset form
+    resetFormBtn.addEventListener('click', () => {
+      leadForm.reset();
+      leadForm.querySelectorAll('.lead-form__input').forEach(input => {
+        input.classList.remove('valid', 'invalid');
+      });
+      leadForm.querySelectorAll('.lead-form__icon').forEach(icon => {
+        icon.classList.remove('show');
+      });
+      leadForm.querySelectorAll('.lead-form__error').forEach(error => {
+        error.classList.remove('show');
+      });
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Get My Free Quote →';
+      leadForm.style.display = 'flex';
+      thankYou.classList.remove('show');
+    });
+  </script>
+</body>
+</html>
